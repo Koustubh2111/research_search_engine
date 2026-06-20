@@ -73,9 +73,15 @@ class IngestionPipeline:
         # At this stage, data is unstructured and noisy
         xml_data = self.client.fetch(query=query, max_results=max_results)
 
+        # print("===== RAW XML START =====")
+        # # print(xml_data[:1000])
+        # print("===== RAW XML END =====")
+
         # STEP 2: Convert XML → structured Paper objects
         # This normalizes external data into internal schema
         papers = self.parser.parse(xml_data)
+
+        print(f"Parsed {len(papers)} papers from arXiv response.")
 
         inserted = 0
         skipped = 0

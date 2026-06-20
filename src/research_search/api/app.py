@@ -7,32 +7,61 @@ This module initializes and configures the FastAPI application for the Research 
 Key Responsibilities:
     - Create and configure the FastAPI application instance
     - Register API route handlers and routers
+    - Manage application lifecycle (startup/shutdown)
     - Set up API versioning and prefixes
 
-The application follows a modular architecture where core routes are organized
-in the routes/ directory and included here for centralized app setup.
-
 Example:
-    The app is typically run using:
-    >>> uvicorn research_search.api.app:app --reload
+    uvicorn research_search.api.app:app --reload
 """
 
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
 from research_search.api.routes.health import router as health_router
 from research_search.api.routes.ingest import router as ingest_router
+from research_search.db.tables import create_tables
 
 
-# Initialize the FastAPI application with metadata
-# This creates the core ASGI application instance with swagger documentation
+# =========================================================
+# APPLICATION LIFECYCLE (MODERN FASTAPI WAY)
+# =========================================================
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Handles startup and shutdown events.
+
+    Startup:
+        - Initialize database schema
+
+    Shutdown:
+        - Cleanup resources (if needed)
+    """
+
+    print("Starting application... creating tables")
+    create_tables()
+
+    yield
+
+    print("Shutting down application")
+
+
+# =========================================================
+# FASTAPI APP INSTANCE
+# =========================================================
 app = FastAPI(
     title="Research Search Platform",
     description="A platform for searching and indexing research papers",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-# Include the health check route with API v1 prefix
-# Health routes: GET /api/v1/health
+
+# =========================================================
+# ROUTES
+# =========================================================
+
+# Health check routes: /api/v1/health
 app.include_router(health_router, prefix="/api/v1")
 
-# Future route inclusions (e.g., ingestion, search) will also be added here
+# Ingestion routes: /api/v1/ingest/...
 app.include_router(ingest_router, prefix="/api/v1")
