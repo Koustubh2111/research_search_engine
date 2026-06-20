@@ -19,6 +19,7 @@ from contextlib import asynccontextmanager
 
 from research_search.api.routes.health import router as health_router
 from research_search.api.routes.ingest import router as ingest_router
+from research_search.api.routes.search import router as search_router
 from research_search.db.tables import create_tables
 
 
@@ -65,3 +66,6 @@ app.include_router(health_router, prefix="/api/v1")
 
 # Ingestion routes: /api/v1/ingest/...
 app.include_router(ingest_router, prefix="/api/v1")
+
+# Search routes: /api/v1/search/...
+app.include_router(search_router, prefix="/api/v1/search")
