@@ -16,7 +16,7 @@ class ArxivClient:
     - Makes testing easy (mock HTTP responses)
     """
 
-    BASE_URL = "http://export.arxiv.org/api/query"
+    BASE_URL = "https://export.arxiv.org/api/query"
 
     def fetch(self, query: str, start: int = 0, max_results: int = 10) -> str:
         """
