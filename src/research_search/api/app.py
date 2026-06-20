@@ -19,6 +19,8 @@ Example:
 
 from fastapi import FastAPI
 from research_search.api.routes.health import router as health_router
+from research_search.api.routes.ingest import router as ingest_router
+
 
 # Initialize the FastAPI application with metadata
 # This creates the core ASGI application instance with swagger documentation
@@ -31,3 +33,6 @@ app = FastAPI(
 # Include the health check route with API v1 prefix
 # Health routes: GET /api/v1/health
 app.include_router(health_router, prefix="/api/v1")
+
+# Future route inclusions (e.g., ingestion, search) will also be added here
+app.include_router(ingest_router, prefix="/api/v1")
