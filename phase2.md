@@ -15,7 +15,7 @@ Research Paper Ingestion (arXiv → Structured Data Layer)
             ┌────────────────────┐
             │ Parser Layer       │
             │ - XML → JSON       │
-            │ - normalize fields  │
+            │ - normalize fields │
             └─────────┬──────────┘
                       ▼
             ┌────────────────────┐
