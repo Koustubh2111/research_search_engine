@@ -68,3 +68,47 @@ class PaperRepository:
         conn.close()
 
         return result is not None
+    
+    def get_all_papers(self):
+        """
+        Fetch all papers from SQLite for indexing.
+
+        This is used by:
+        - FAISS indexing pipeline
+        - semantic search service
+
+        Returns:
+            List[Paper]
+        """
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT id, title, abstract, authors, categories,
+                published, updated, url
+            FROM papers
+            """
+        )
+
+        rows = cursor.fetchall()
+        conn.close()
+
+        papers = []
+
+        for r in rows:
+            papers.append(
+                Paper(
+                    id=r[0],
+                    title=r[1],
+                    abstract=r[2],
+                    authors=json.loads(r[3]),
+                    categories=json.loads(r[4]),
+                    published=r[5],  # keep as string for now (or parse later)
+                    updated=r[6],
+                    url=r[7],
+                )
+            )
+
+        return papers
