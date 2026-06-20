@@ -59,3 +59,12 @@ curl -X POST "http://127.0.0.1:8000/api/v1/ingest/arxiv" \
 Expectation - {"query":"transformers","fetched":5,"inserted":5,"skipped":0}% 
 
 ```
+
+Solved Bugs
+
+
+XML namespace parsing bug (very common in data engineering)
+Silent empty dataset failures
+FastAPI lifecycle deprecation → fixed with lifespan
+SQLite “no such table” lifecycle issue
+DB initialization ordering problem
